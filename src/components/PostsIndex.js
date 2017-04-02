@@ -8,6 +8,18 @@ class PostsIndex extends Component {
   componentWillMount() {
     this.props.fetchPosts();
   }
+
+  renderPosts() {
+    return this.props.posts.map((post) => {
+      return (
+        <li className="list-group-item" key={post.id}>
+          <strong>{post.title}</strong>
+          <span className="badge pull-right">{post.categories}</span>
+        </li>
+      );
+    });
+  }
+
   render() {
     return (
       <div>
@@ -16,15 +28,22 @@ class PostsIndex extends Component {
             Add a post
           </Link>
         </div>
-        <h2>List of Blog</h2>
+        <h3>Posts</h3>
+        <ul className="list-group">
+          <li>{this.renderPosts()}</li>
+        </ul>
       </div>
 
     );
   }
 }
 
+function mapStatetoProps(state) {
+  return {posts: state.posts.all};
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({fetchPosts}, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(PostsIndex);
+export default connect(mapStatetoProps, mapDispatchToProps)(PostsIndex);
